@@ -15,10 +15,41 @@ from skge import HolE, StochasticTrainer
 # M = number of relations
 # xs = list of (subject, object, predicte) triples
 # ys = list of truth values for triples (1 = true, -1 = false)
-N, M, xs, ys = load_data('path to data')
+import csv
+
+# my code
+# clean data
+with open('0101journal_matrix.csv', "r") as f:
+    csvraw = list(csv.reader(f))
+col_headers = csvraw[0][1:]
+row_headers = [row[0] for row in csvraw[1:]]
+val = [row[1:] for row in csvraw[1:]]
+data = []
+for row in range(len(row_headers)):
+    for col in range(len(col_headers)):
+        data.append((row_headers[row],col_headers[col],val[row][col]))
+        
+# find truth value list
+truthval = []
+for row in range(len(data)):
+    if data[row][2] != '0':
+        truthval.append(1)
+    else:
+        truthval.append(-1)
+print(len(data))
+
+# Load knowledge graph 
+# N = number of entities
+# M = number of relations
+# xs = list of (subject, object, predicte) triples
+# ys = list of truth values for triples (1 = true, -1 = false)
+N = len(col_headers)
+M = len(data)
+xs = data
+ys = truthval
 
 # instantiate HolE with an embedding space of size 100
-model = HolE((N, N, M), 100)
+model = HolE((N, M, N), 100)
 
 # instantiate trainer
 trainer = StochasticTrainer(model)
