@@ -13,7 +13,7 @@ DESCRIPTION = descr
 # right place.
 try:
     import pypandoc
-    LONG_DESCRIPTION = pypandoc.convert('README.md', 'rst')
+    LONG_DESCRIPTION = pypandoc.convert_text('README.md', 'rst', format ='md')
 except (IOError, ImportError):
     LONG_DESCRIPTION = ''
 MAINTAINER = 'Maximilian Nickel',
